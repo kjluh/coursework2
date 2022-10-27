@@ -35,8 +35,6 @@ public class ServicePlanner {
                 System.out.println("На эту дату есть задачи: " + task);
             }else if (task.getRepeatability().equals(Repeatability.annual)&& task.getYear().equals(localDate)) {
                 System.out.println("На эту дату есть задачи: " + task);
-            } else {
-                System.out.println("Задач на " + localDate + " нет");
             }
         }
     }
