@@ -1,11 +1,15 @@
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
-    private static DailyPlanner planner = new DailyPlanner();
+    protected static DailyPlanner planner = new DailyPlanner();
+    private static final ServicePlanner servicePlanner = new ServicePlanner();
+
     public static void main(String[] args) throws PersonalTackException {
-        ServicePlanner servicePlanner = new ServicePlanner((Map<Integer, Task>) planner);
+
         try (Scanner scanner = new Scanner(System.in)) {
             label:
             while (true) {
@@ -18,12 +22,12 @@ public class Main {
                             inputTask(scanner);
                             break;
                         case 2:
-                            remove(scanner);
+                            ServicePlanner.remove(scanner);
                             break;
                         case 3:
-                            System.out.println(servicePlanner);
+                            System.out.println(planner);
                             System.out.println("Введите желаемую дату в формате : год-месяц-день ");
-                            getTaskforDate(scanner);
+                            ServicePlanner.getTaskforDate(scanner);
                             break;
                         case 0:
                             break label;
@@ -35,11 +39,8 @@ public class Main {
             }
         }
     }
-
-    private static void getTaskforDate(Scanner scanner) {
-        LocalDate taskDate = LocalDate.parse(scanner.next());
-        planner.getDate(taskDate);
-
+    private static void printMenu() {
+        System.out.println("1. Добавить задачу \n2. Удалить задачу \n3. Получить задачу на указанный день \n0. Выход");
     }
 
     private static void inputTask(Scanner scanner) throws PersonalTackException {
@@ -65,40 +66,39 @@ public class Main {
         System.out.println("Если хотите, введите желаемую дату задачи в формате год-месяц-день ");
         String dateCreate = scanner.next();
         if (dateCreate.equals("нет")) {
-            Task example = new Task(taskName, taskDescription, personalTack, repeatability(repeatability));
+            Task example = new Task(taskName, taskDescription, personalTack, servicePlanner.repeatability(repeatability));
             planner.addDailyPlanner(example.getCounter(), example);
         } else {
-            Task example = new Task(taskName, taskDescription, personalTack, repeatability(repeatability));
+            Task example = new Task(taskName, taskDescription, personalTack, servicePlanner.repeatability(repeatability));
             planner.addDailyPlanner(example.getCounter(), example);
             example.setTimeCreateTask(LocalDate.parse(dateCreate));
         }
     }
 
+//    private static Repeatability repeatability(int repeatability) {
+//        Repeatability x = null;
+//        if (repeatability == 1) {
+//            x = Repeatability.single;
+//        } else if (repeatability == 2) {
+//            x = Repeatability.daily;
+//        } else if (repeatability == 3) {
+//            x = Repeatability.weekly;
+//        } else if (repeatability == 4) {
+//            x = Repeatability.monthly;
+//        } else if (repeatability == 5) {
+//            x = Repeatability.annual;
+//        }
+//        return x;
+//    }
 
-    private static Repeatability repeatability(int repeatability) {
-        Repeatability x = null;
-        if (repeatability == 1) {
-            x = Repeatability.single;
-        } else if (repeatability == 2) {
-            x = Repeatability.daily;
-        } else if (repeatability == 3) {
-            x = Repeatability.weekly;
-        } else if (repeatability == 4) {
-            x = Repeatability.monthly;
-        } else if (repeatability == 5) {
-            x = Repeatability.annual;
-        }
-        return x;
-    }
+//    private static void remove(Scanner scanner) {
+//        System.out.println("Введите номер задачи которую нужно удалить ");
+//        int taskid = scanner.nextInt();
+//        planner.removeTask(taskid);
+//    }
 
-    private static void printMenu() {
-        System.out.println("1. Добавить задачу \n2. Удалить задачу \n3. Получить задачу на указанный день \n0. Выход");
-    }
-
-    private static void remove(Scanner scanner) {
-        System.out.println("Введите номер задачи которую нужно удалить ");
-        int taskid = scanner.nextInt();
-        planner.removeTask(taskid);
-    }
-
+    //    private static void getTaskforDate(Scanner scanner) {
+//        LocalDate taskDate = LocalDate.parse(scanner.next());
+//        planner.getDate(taskDate);
+//    }
 }
