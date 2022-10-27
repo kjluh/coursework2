@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Main {
     private static DailyPlanner planner = new DailyPlanner();
-
     public static void main(String[] args) throws PersonalTackException {
         ServicePlanner servicePlanner = new ServicePlanner((Map<Integer, Task>) planner);
         try (Scanner scanner = new Scanner(System.in)) {
